@@ -3,7 +3,8 @@ title: 'Assignment No. 1'
 
 ---
 
-```{r setup, include=TRUE}
+
+```r
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -15,7 +16,8 @@ This assignment makes use of data from a personal activity monitoring device. Th
 
 ### Loadiing the data
 
-```{r }
+
+```r
 MyData <- read.csv(file="activity.csv", header=TRUE, sep=",")
 ```
 
@@ -25,20 +27,39 @@ MyData <- read.csv(file="activity.csv", header=TRUE, sep=",")
 2. If you do not understand the difference between a histogram and a barplot, research the difference between them. 4. Make a histogram of the total number of steps taken each day
 
 
-```{r}
+
+```r
 library(ggplot2)
 fdata<-aggregate(steps~date,MyData,sum)
 ggplot(fdata, aes(x=steps))+geom_histogram()+
 labs(title="Histogram of steps/day", x="Steps per day", y="Frequency")
 ```
 
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
+
 #### Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
+
+```r
 meansteps<-mean(fdata$steps, na.rm = TRUE)
 mediansteps<-median(fdata$steps, na.rm = TRUE)
 meansteps
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 mediansteps
+```
+
+```
+## [1] 10765
 ```
 
 ### What is the average daily activity pattern
@@ -46,13 +67,23 @@ mediansteps
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+
+```r
 #make the time series plot for 5 min interval with average no. of steps
 fdata2<-aggregate(steps~interval,MyData,mean)
 ggplot(fdata2, aes(x=interval, y=steps))+geom_line()
+```
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+
+```r
 #Maximum steps on average across all the days
 fdata2[fdata2$steps==max(fdata2$steps), ]
+```
+
+```
+##     interval    steps
+## 104      835 206.1698
 ```
 
 ###Imputing missing values
@@ -61,10 +92,17 @@ fdata2[fdata2$steps==max(fdata2$steps), ]
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r}
+
+```r
 #calculate the total number of missing values
 sum(is.na(MyData))
+```
 
+```
+## [1] 2304
+```
+
+```r
 #fill the missing values with the mean
 MyDataNew<-MyData
 #avginterval<-mean(MyData$interval, na.rm = TRUE)
@@ -77,11 +115,30 @@ d<-replace(MyDataNew$steps, is.na(MyDataNew$steps), meansteps)
 fdataNew<-aggregate(steps~date,MyDataNew,sum)
 ggplot(fdataNew, aes(x=steps))+geom_histogram()+
   labs(title="Histogram of Steps/day including missing values", x="Steps per day", y="Frequency")
+```
 
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+
+```r
 meanstepsNew<-mean(fdataNew$steps, na.rm = TRUE)
 medianstepsNew<-median(fdataNew$steps, na.rm = TRUE)
 meanstepsNew
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 medianstepsNew
+```
+
+```
+## [1] 10765
 ```
 
 There is no impact on mean and median of the data after imputing missing data with mean/median value of the data.It is still same 
@@ -93,10 +150,18 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-```{r}
+
+```r
 library(lubridate)
 library(dplyr)
 Sys.setlocale("LC_TIME", "English")
+```
+
+```
+## [1] "English_United States.1252"
+```
+
+```r
 MyDataNew<-MyData
 MyDataNew$date<-ymd(MyDataNew$date)
 MyDataNew<-mutate(MyDataNew, weektype=ifelse(weekdays(MyDataNew$date)=="Saturday" | weekdays(MyDataNew$date)=="Sunday", "Weekend", "Weekdays"))
@@ -107,5 +172,7 @@ ggplot(fdataWeek, aes(x=interval,y=steps, color=weektype))+
   geom_line()+
   facet_wrap(~weektype, ncol=1, nrow=2)
 ```
+
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
 
 From the two types of plots, it is obvious tha object is more active during the weekdays in comaprisn to weekends.
