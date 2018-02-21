@@ -39,7 +39,7 @@ labs(title="Histogram of steps/day", x="Steps per day", y="Frequency")
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
+![plot of chunk unnamed-chunk-2](unnamed-chunk-2-1.png)
 
 #### Calculate and report the mean and median of the total number of steps taken per day
 
@@ -74,7 +74,7 @@ fdata2<-aggregate(steps~interval,MyData,mean)
 ggplot(fdata2, aes(x=interval, y=steps))+geom_line()
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+![plot of chunk unnamed-chunk-4](unnamed-chunk-4-1.png)
 
 ```r
 #Maximum steps on average across all the days
@@ -121,7 +121,7 @@ ggplot(fdataNew, aes(x=steps))+geom_histogram()+
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-5](unnamed-chunk-5-1.png)
 
 ```r
 meanstepsNew<-mean(fdataNew$steps, na.rm = TRUE)
@@ -173,6 +173,6 @@ ggplot(fdataWeek, aes(x=interval,y=steps, color=weektype))+
   facet_wrap(~weektype, ncol=1, nrow=2)
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-6](unnamed-chunk-6-1.png)
 
 From the two types of plots, it is obvious tha object is more active during the weekdays in comaprisn to weekends.
